@@ -9,6 +9,13 @@
   "author": "MrLyfing",
   "license": "ISC",
   "dependencies": {
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "module-alias": "^2.1.0"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@client": "./client",
+    "@common": "./common",
+    "@server": "./server"
   }
 }

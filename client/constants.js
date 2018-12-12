@@ -4,7 +4,7 @@ const COMMANDS = {
   PUSH: 'push'
 }
 
-const VERSION = require('../package.json').version
+const VERSION = require('@root/package.json').version
 
 module.exports = {
   VERSION,
