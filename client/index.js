@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 require('module-alias/register')
 
 const { COMMANDS } = require('./constants')
@@ -19,10 +20,10 @@ else if (args.h || args.help || !Object.values(COMMANDS).includes(cmd)) {
 console.log(`running ${cmd} command`)
 console.dir(args)
 
-try {
-  // Run commands
-  action[cmd](args)
-} catch (err) {
-  console.log('err', err)
-  action[COMMANDS.HELP](args)
-}
+action[cmd](args)
+  .catch(err => {
+  // as we’re syntactically unable to use await at top level code,  .then/catch is needed 
+  // to handle the final result or falling-through errors.
+    console.log(err)
+    action[COMMANDS.HELP](args)
+  })

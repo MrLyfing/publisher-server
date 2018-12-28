@@ -10,12 +10,16 @@
   "license": "ISC",
   "dependencies": {
     "minimist": "^1.2.0",
-    "module-alias": "^2.1.0"
+    "module-alias": "^2.1.0",
+    "tar-fs": "^1.16.3"
   },
   "_moduleAliases": {
     "@root": ".",
     "@client": "./client",
     "@common": "./common",
     "@server": "./server"
+  },
+  "bin": {
+    "static-publisher": "client/index.js"
   }
 }

@@ -1,7 +1,11 @@
 const fs = require('fs')
 
 function isDirectoryExists(path) {
-  return fs.existsSync(path) && fs.statSync(path).isDirectory()
+  try {
+    return fs.existsSync(path) && fs.statSync(path).isDirectory()
+  } catch (err) {
+    return false
+  }
 }
 
 function isString(val) {

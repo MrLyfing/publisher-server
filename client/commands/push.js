@@ -1,9 +1,24 @@
 const zlib = require('zlib')
-const resolve = require('path').resolve
+const tar = require('tar-fs')
+const fs = require('fs')
+const { basename } = require('path')
 
 const { isDirectoryExists, isString } = require('@common/utils')
 
-module.exports = (args) => {
+function package(path) {
+  return new Promise((resolve, reject) => {
+    const filename = `${basename(path)}.tar.gz`
+    tar.pack(path)
+      .pipe(zlib.createGzip())
+      .pipe(fs.createWriteStream(filename))
+      .on('finish', err => {
+        if (err) reject(new Error('Packaging directory failed'))
+        resolve(filename)
+      })
+  })
+}
+
+module.exports = async (args) => {
   var path = args._[1]
   const domain = args.d || args.domain
 
@@ -14,11 +29,10 @@ module.exports = (args) => {
     throw new Error('Option <domain> is missing')
   }
 
-  path = resolve(__dirname, path)
   if (isDirectoryExists(path)) {
-
-
+    const filename = await package(path)
+    // send data to server
   } else {
-    throw new Error(`Path "${path}" does not exist`)
+    throw new Error(`Path ${path} does not exist or is not a directory`)
   }
 }
