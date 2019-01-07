@@ -4,7 +4,7 @@ const push = require('./push')
 /* All commands must use async */
 module.exports = {
   [COMMANDS.HELP]: async args => {
-    console.log('Help section')
+    console.log('Help section', args)
   },
   [COMMANDS.VERSION]: async args => {
     console.log(`v${VERSION}`, args)
