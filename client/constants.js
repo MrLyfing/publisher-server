@@ -1,5 +1,7 @@
+const { version } = require('@root/package.json')
+
 module.exports = {
-  VERSION: require('@root/package.json').version,
+  VERSION: version,
   COMMANDS: {
     HELP: 'help',
     VERSION: 'version',

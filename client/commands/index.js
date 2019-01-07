@@ -1,12 +1,13 @@
 const { VERSION, COMMANDS } = require('@client/constants')
+const push = require('./push')
 
 /* All commands must use async */
 module.exports = {
-  [COMMANDS.HELP]: async (args) => {
+  [COMMANDS.HELP]: async args => {
     console.log('Help section')
   },
-  [COMMANDS.VERSION]: async (args) => {
+  [COMMANDS.VERSION]: async args => {
     console.log(`v${VERSION}`)
   },
-  [COMMANDS.PUSH]: require('./push')
+  [COMMANDS.PUSH]: push
 }

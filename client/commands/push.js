@@ -1,25 +1,28 @@
 const zlib = require('zlib')
 const tar = require('tar-fs')
-const fs = require('fs')
-const { basename } = require('path')
+const request = require('request')
 
 const { isDirectoryExists, isString } = require('@common/utils')
 
-function package(path) {
-  return new Promise((resolve, reject) => {
-    const filename = `${basename(path)}.tar.gz`
-    tar.pack(path)
+const URL = 'http://localhost:3000/api/push'
+
+function pack(path) {
+  return new Promise(resolve => {
+    const chunks = []
+    tar
+      .pack(path)
       .pipe(zlib.createGzip())
-      .pipe(fs.createWriteStream(filename))
-      .on('finish', err => {
-        if (err) reject(new Error('Packaging directory failed'))
-        resolve(filename)
+      .on('data', chunk => {
+        chunks.push(chunk)
+      })
+      .on('end', () => {
+        resolve(Buffer.concat(chunks))
       })
   })
 }
 
-module.exports = async (args) => {
-  var path = args._[1]
+module.exports = async args => {
+  const path = args._[1]
   const domain = args.d || args.domain
 
   if (!path) {
@@ -30,8 +33,18 @@ module.exports = async (args) => {
   }
 
   if (isDirectoryExists(path)) {
-    const filename = await package(path)
-    // send data to server
+    const buffer = await pack(path)
+    console.log('send', buffer)
+    request.post(
+      {
+        url: URL,
+        formData: { compress_file: buffer }
+      },
+      (err, res, body) => {
+        if (err) throw new Error(`Request to ${URL} failed`)
+        console.log(body)
+      }
+    )
   } else {
     throw new Error(`Path ${path} does not exist or is not a directory`)
   }
