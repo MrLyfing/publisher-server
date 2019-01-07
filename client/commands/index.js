@@ -7,7 +7,7 @@ module.exports = {
     console.log('Help section')
   },
   [COMMANDS.VERSION]: async args => {
-    console.log(`v${VERSION}`)
+    console.log(`v${VERSION}`, args)
   },
   [COMMANDS.PUSH]: push
 }
