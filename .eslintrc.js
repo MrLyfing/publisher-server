@@ -9,6 +9,7 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error', // display prettier error from eslint
     'import/no-unresolved': 'off', // Allowing module-alias depedency to work with node
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_$' }],
 
     'no-console': 'off' // Temporary rule
   }

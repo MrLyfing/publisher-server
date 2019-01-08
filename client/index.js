@@ -17,15 +17,14 @@ if (args.v || args.version) {
 }
 
 console.log(`running ${cmd} command`)
-console.dir(args)
+console.log(args)
 
 action[cmd](args)
   .then(() => {
     console.log('success')
   })
   .catch(err => {
-    // At top level code, .then/catch is to handle the final result or falling-through errors.
-    console.log('fail')
-    console.log(err)
+    // At top level code, .then/catch must be used to handle the final result or falling-through errors.
+    console.error(err)
     action[COMMANDS.HELP](args)
   })

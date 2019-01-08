@@ -1,4 +1,3 @@
-const zlib = require('zlib')
 const tar = require('tar-fs')
 const request = require('request')
 
@@ -7,13 +6,15 @@ const { isDirectoryExists, isString } = require('@common/utils')
 const URL = 'http://localhost:3000/api/push'
 
 function pack(path) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const chunks = []
     tar
-      .pack(path)
-      .pipe(zlib.createGzip())
+      .pack(path) // TODO: Compress tar
       .on('data', chunk => {
         chunks.push(chunk)
+      })
+      .on('error', err => {
+        reject(err)
       })
       .on('end', () => {
         resolve(Buffer.concat(chunks))
@@ -34,17 +35,19 @@ module.exports = async args => {
 
   if (isDirectoryExists(path)) {
     const buffer = await pack(path)
-    console.log('send', buffer)
-    request.post(
-      {
-        url: URL,
-        formData: { compress_file: buffer }
-      },
-      (err, res, body) => {
-        if (err) throw new Error(`Request to ${URL} failed`)
-        console.log(body)
-      }
-    )
+    console.log('send', buffer.length)
+    await new Promise(() => {
+      request.post(
+        {
+          url: URL,
+          formData: { compress_file: buffer }
+        },
+        (err, _, body) => {
+          if (err) throw new Error(`Request to ${URL} failed`)
+          console.log(body)
+        }
+      )
+    })
   } else {
     throw new Error(`Path ${path} does not exist or is not a directory`)
   }
