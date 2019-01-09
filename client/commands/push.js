@@ -35,16 +35,16 @@ module.exports = async args => {
 
   if (isDirectoryExists(path)) {
     const buffer = await pack(path)
-    console.log('send', buffer.length)
+    console.log('[PUSH] Data sent :', buffer.length)
     await new Promise(() => {
       request.post(
         {
           url: URL,
-          formData: { compress_file: buffer }
+          formData: { copress_file: buffer }
         },
         (err, _, body) => {
           if (err) throw new Error(`Request to ${URL} failed`)
-          console.log(body)
+          console.log('[PUSH] API response :', body)
         }
       )
     })

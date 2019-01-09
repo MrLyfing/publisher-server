@@ -16,8 +16,9 @@ if (args.v || args.version) {
   cmd = COMMANDS.HELP
 }
 
-console.log(`running ${cmd} command`)
-console.log(args)
+console.log(`> Running ${cmd.toUpperCase()} command`)
+console.log('> Command args', args)
+console.log('\n')
 
 action[cmd](args)
   .then(() => {
