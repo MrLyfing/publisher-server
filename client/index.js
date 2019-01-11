@@ -12,7 +12,6 @@ let cmd = args._[0] || COMMANDS.HELP
 if (args.v || args.version) {
   cmd = COMMANDS.VERSION
 } else if (args.h || args.help || !Object.values(COMMANDS).includes(cmd)) {
-  // TODO: Implement generic error handler
   cmd = COMMANDS.HELP
 }
 

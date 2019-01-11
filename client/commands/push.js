@@ -9,7 +9,7 @@ function pack(path) {
   return new Promise((resolve, reject) => {
     const chunks = []
     tar
-      .pack(path) // TODO: Compress tar
+      .pack(path)
       .on('data', chunk => {
         chunks.push(chunk)
       })
@@ -40,7 +40,7 @@ module.exports = async args => {
       request.post(
         {
           url: URL,
-          formData: { copress_file: buffer }
+          formData: { compress_file: buffer }
         },
         (err, _, body) => {
           if (err) throw new Error(`Request to ${URL} failed`)

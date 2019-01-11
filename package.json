@@ -14,9 +14,9 @@
     "minimist": "^1.2.0",
     "module-alias": "^2.1.0",
     "morgan": "^1.9.1",
+    "multiparty": "^4.2.1",
     "request": "^2.88.0",
-    "tar-fs": "^1.16.3",
-    "multiparty": "^4.2.1"
+    "tar-fs": "^1.16.3"
   },
   "_moduleAliases": {
     "@root": ".",

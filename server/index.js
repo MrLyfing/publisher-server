@@ -25,11 +25,11 @@ app.post('/api/push', (req, res, next) => {
       paramErr.statusCode = 400
       next(paramErr)
     } else {
-      const receivedBuffer = Buffer.from(fields.compress_file[0])
+      const receivedBuffer = fields.compress_file[0]
       console.log('received', receivedBuffer.length)
 
       const receivedStream = new stream.PassThrough()
-      receivedStream.end(Buffer.from(fields.compress_file[0]))
+      receivedStream.end(receivedBuffer)
       receivedStream.pipe(tar.extract('./dir-received')).on('finish', () => {
         res.json({ res: 'Uploaded' })
       })
