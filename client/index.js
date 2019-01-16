@@ -25,6 +25,6 @@ action[cmd](args)
   })
   .catch(err => {
     // At top level code, .then/catch must be used to handle the final result or falling-through errors.
-    console.error(err)
+    console.error('catch', err)
     action[COMMANDS.HELP](args)
   })

@@ -23,32 +23,36 @@ function pack(path) {
 }
 
 module.exports = async args => {
-  const path = args._[1]
-  const domain = args.d || args.domain
+  const path = args._[1] || '.' // Default to current location if <path> not provided
+  const { root, subdomain } = args
 
-  if (!path) {
-    throw new Error('Argument [path] is missing')
+  if (!isString(subdomain) && !root) {
+    throw new Error('Option --subdomain <name> is missing')
   }
-  if (!isString(domain)) {
-    throw new Error('Option <domain> is missing')
+  if (subdomain && root) {
+    throw new Error('Option --subdomain <name> is not allowed')
   }
 
   if (isDirectoryExists(path)) {
     const buffer = await pack(path)
     console.log('[PUSH] Data sent :', buffer.length)
-    await new Promise(() => {
-      request.post(
-        {
-          url: URL,
-          formData: { assets: buffer }
-        },
-        (err, _, body) => {
-          if (err) throw new Error(`Request to ${URL} failed`)
+
+    // root option is Boolean type and is converted
+    // to string as formData can only accepts string values
+    const formData = { assets: buffer, root: root.toString() }
+    if (!root) {
+      formData.subdomain = subdomain
+    }
+    await new Promise((resolve, reject) => {
+      request.post({ url: URL, formData }, (err, _, body) => {
+        if (err) reject(new Error(`Request to ${URL} failed`))
+        else {
           console.log('[PUSH] API response :', body)
+          resolve()
         }
-      )
+      })
     })
   } else {
-    throw new Error(`Path ${path} does not exist or is not a directory`)
+    throw new Error(`<path> ${path} does not exist or is not a directory`)
   }
 }

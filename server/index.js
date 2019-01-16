@@ -25,8 +25,13 @@ app.post('/api/push', (req, res, next) => {
   const form = new multiparty.Form()
   form.parse(req, async (err, fields, _) => {
     if (err) next(err)
-    else if (!fields.assets || !fields.root || !fields.domain) {
-      const paramErr = new Error('Missing parameter(s)')
+    else if (
+      !fields.assets ||
+      !fields.root ||
+      (fields.root && fields.subdomain) ||
+      (!fields.root && !fields.subdomain)
+    ) {
+      const paramErr = new Error('Missing or incorrect parameter(s)')
       paramErr.statusCode = 400
       next(paramErr)
     } else {
@@ -36,11 +41,11 @@ app.post('/api/push', (req, res, next) => {
       const receivedStream = new stream.PassThrough()
       receivedStream.end(receivedBuffer)
 
-      // Extract tar and create folder in /var/www/subdomains/[subdomain] or update /var/www/default (for root domain)
       const extractPath = fields.root
         ? config.NGINX.ROOT_DOMAIN_FOLDER
         : config.NGINX.SUB_DOMAINS_FOLDER
 
+      // Extract tar and move assets to SUB_DOMAINS_FOLDER or update ROOT_DOMAIN_FOLDER (for root domain)
       receivedStream.pipe(tar.extract(extractPath)).on('finish', () => {
         res.json({ res: 'Uploaded' })
       })
