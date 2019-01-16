@@ -40,7 +40,7 @@ module.exports = async args => {
       request.post(
         {
           url: URL,
-          formData: { compress_file: buffer }
+          formData: { assets: buffer }
         },
         (err, _, body) => {
           if (err) throw new Error(`Request to ${URL} failed`)
