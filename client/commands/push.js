@@ -27,31 +27,32 @@ module.exports = async args => {
   const { root, subdomain } = args
 
   if (!isString(subdomain) && !root) {
-    throw new Error('Option --subdomain <name> is missing')
+    throw new Error('Option --subdomain <name> is missing or incorect')
   }
   if (subdomain && root) {
-    throw new Error('Option --subdomain <name> is not allowed')
+    throw new Error('Options --subdomain and --root cannot be used together')
   }
 
   if (isDirectoryExists(path)) {
     const buffer = await pack(path)
-    console.log('[PUSH] Data sent :', buffer.length)
 
-    // root option is Boolean type and is converted
-    // to string as formData can only accepts string values
-    const formData = { assets: buffer, root: root.toString() }
-    if (!root) {
+    console.log('[PUSH] Data sent :', buffer.length)
+    const formData = { assets: buffer }
+    if (root) {
+      // root parameter is casted as formData can only accept key-value (string)
+      formData.root = true.toString()
+    } else {
       formData.subdomain = subdomain
     }
-    await new Promise((resolve, reject) => {
+    const res = await new Promise((resolve, reject) => {
       request.post({ url: URL, formData }, (err, _, body) => {
         if (err) reject(new Error(`Request to ${URL} failed`))
         else {
-          console.log('[PUSH] API response :', body)
-          resolve()
+          resolve(body)
         }
       })
     })
+    console.log('[PUSH] API response :', res)
   } else {
     throw new Error(`<path> ${path} does not exist or is not a directory`)
   }
