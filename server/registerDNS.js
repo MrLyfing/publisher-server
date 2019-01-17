@@ -16,15 +16,16 @@ const DEFAULT_REQUEST_OPTIONS = (uri, options) => ({
   ...options
 })
 
-const errorHandler = (resolve, reject) => (
+const requestHandler = (resolve, reject) => (
   errMessage,
   { statusCode },
   body
 ) => {
+  body && console.log(`[DIGITAL_OCEAN_API]: ${JSON.stringify(body)}`)
   if (errMessage) {
     reject(boom.badImplementation(errMessage))
   } else if (statusCode >= 400) {
-    reject(boom.serverUnavailable(body))
+    reject(boom.serverUnavailable(JSON.stringify(body)))
   } else {
     resolve(body)
   }
@@ -34,7 +35,7 @@ async function getARecords() {
   const data = await new Promise((resolve, reject) => {
     request.get(
       DEFAULT_REQUEST_OPTIONS(`/domains/${ROOT_DOMAIN_NAME}/records`),
-      errorHandler(resolve, reject)
+      requestHandler(resolve, reject)
     )
   })
   if (data.domain_records && Array.isArray(data.domain_records)) {
@@ -42,16 +43,14 @@ async function getARecords() {
       .filter(({ type }) => type === 'A')
       .map(({ name }) => name)
   }
-  throw boom.serverUnavailable(
-    'Cannot process Digital Ocean response data format'
-  )
+  throw boom.serverUnavailable('Cannot process Digital Ocean response format')
 }
 
 function createRecord(form) {
   return new Promise((resolve, reject) => {
     request.post(
       DEFAULT_REQUEST_OPTIONS(`/domains/${ROOT_DOMAIN_NAME}/records`, { form }),
-      errorHandler(resolve, reject)
+      requestHandler(resolve, reject)
     )
   })
 }

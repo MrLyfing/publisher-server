@@ -12,7 +12,12 @@ function isString(val) {
   return typeof val === 'string' || val instanceof String
 }
 
+function matchSingleSubdomainLvl(str) {
+  return /^[a-zA-Z0-9][a-zA-Z0-9-]{0,70}[a-zA-Z0-9]$/.test(str)
+}
+
 module.exports = {
   isDirectoryExists,
-  isString
+  isString,
+  matchSingleSubdomainLvl
 }
