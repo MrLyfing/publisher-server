@@ -35,7 +35,10 @@ app.post('/api/push', (req, res, next) => {
       next(boom.badRequest('Form data is incorrect'))
     } else {
       // Fields values returned by multiparty are array types
-      const [receivedBuffer, root] = [fields.assets[0], !!(fields.root && fields.root[0])]
+      const [receivedBuffer, root] = [
+        fields.assets[0],
+        !!(fields.root && fields.root[0])
+      ]
       let extractPath
       let finalDomainName
       if (root) {
@@ -45,8 +48,7 @@ app.post('/api/push', (req, res, next) => {
         const subdomain = fields.subdomain[0]
         // Register new DNS record if assets are not pushed on root domain
         try {
-          const resDNS = await registerDNS(subdomain)
-          console.log(`[DIGITAL_OCEAN_API]: ${resDNS}`)
+          await registerDNS(subdomain)
         } catch (errDNS) {
           next(errDNS)
           return
@@ -82,7 +84,10 @@ app.use((err, req, res, _) => {
   if (!err.isBoom) {
     // Log not boom error as they might contain important error info
     console.error(err)
-    error = err instanceof Error ? boom.boomify(err) : boom.badImplementation("Something's wrong")
+    error =
+      err instanceof Error
+        ? boom.boomify(err)
+        : boom.badImplementation("Something's wrong")
   }
   const code = error.output.statusCode
   res.status(code).json(error.output.payload)
