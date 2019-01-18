@@ -6,6 +6,7 @@ const {
   ROOT_DOMAIN_NAME,
   IPV4_ADDRESS
 } = require('@server/config')
+const { matchSingleSubdomainLvl } = require('@common/utils')
 
 const DEFAULT_REQUEST_OPTIONS = (uri, options) => ({
   url: `https://api.digitalocean.com/v2/${uri}`,
@@ -21,7 +22,7 @@ const requestHandler = (resolve, reject) => (
   { statusCode },
   body
 ) => {
-  body && console.log(`[DIGITAL_OCEAN_API]: ${JSON.stringify(body)}`)
+  body && console.log(`[DIGITAL_OCEAN_API] - ${JSON.stringify(body)}`)
   if (errMessage) {
     reject(boom.badImplementation(errMessage))
   } else if (statusCode >= 400) {
@@ -55,13 +56,13 @@ function createRecord(form) {
   })
 }
 
-module.exports = async subdomain => {
+async function registerDNS(subdomain) {
+  // Return true if new DNS record was created
+  if (!matchSingleSubdomainLvl(subdomain)) {
+    throw boom.badRequest('Only characters are allowed (a-z, A-Z, 0-9 and -))')
+  }
   const records = await getARecords()
-  if (records.includes(subdomain)) {
-    throw boom.forbidden(
-      `${subdomain}.${ROOT_DOMAIN_NAME} DNS record already exist`
-    )
-  } else {
+  if (!records.includes(subdomain)) {
     await createRecord({
       type: 'A',
       name: subdomain,
@@ -71,8 +72,14 @@ module.exports = async subdomain => {
     await createRecord({
       type: 'CNAME',
       name: `www.${subdomain}`,
-      data: `${ROOT_DOMAIN_NAME}.`, // Data needs to end with a dot (.) for CNAME
+      data: `${subdomain}.${ROOT_DOMAIN_NAME}.`, // Data needs to end with a dot (.) for CNAME
       ttl: 43200
     })
+    return true
   }
+  return false
+}
+
+module.exports = {
+  registerDNS
 }
