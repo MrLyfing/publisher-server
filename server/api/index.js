@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const { responseJSON } = require('@server/utils')
 const { push, update, list, remove } = require('@server/api/commands')
+const { lookupSubdomain } = require('@server/middlewares')
 
 const router = Router()
 
@@ -11,6 +12,6 @@ router.get('/', (req, res) => {
 router.post('/push', push)
 router.get('/list', list)
 router.put('/update/:subdomain', update)
-router.delete('/delete/:subdomain', remove)
+router.delete('/remove/:subdomain', lookupSubdomain, remove)
 
 module.exports = router

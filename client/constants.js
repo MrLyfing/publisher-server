@@ -5,6 +5,9 @@ module.exports = {
   COMMANDS: {
     HELP: 'help',
     VERSION: 'version',
-    PUSH: 'push'
+    PUSH: 'push',
+    LIST: 'list',
+    UPDATE: 'update',
+    REMOVE: 'remove'
   }
 }

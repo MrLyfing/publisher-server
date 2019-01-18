@@ -32,7 +32,7 @@ const requestHandler = (resolve, reject) => (
   }
 }
 
-async function getRecords(filterFunc = () => true) {
+async function getAllRecords() {
   const data = await new Promise((resolve, reject) => {
     request.get(
       DEFAULT_REQUEST_OPTIONS(`/domains/${ROOT_DOMAIN_NAME}/records`),
@@ -40,9 +40,16 @@ async function getRecords(filterFunc = () => true) {
     )
   })
   if (data.domain_records && Array.isArray(data.domain_records)) {
-    return data.domain_records.filter(filterFunc)
+    return data.domain_records
   }
   throw boom.serverUnavailable('Cannot process Digital Ocean response format')
+}
+
+async function getRecord(subdomain) {
+  const records = await getAllRecords()
+  return records.find(
+    record => record.type === 'A' && record.name === subdomain
+  )
 }
 
 function createRecord(form) {
@@ -59,9 +66,9 @@ async function registerDNS(subdomain) {
   if (!matchSingleSubdomainLvl(subdomain)) {
     throw boom.badRequest('Only characters are allowed (a-z, A-Z, 0-9 and -))')
   }
-  var records = await getRecords(record => record.type === 'A')
-  records = records.map(record => record.name)
-  if (!records.includes(subdomain)) {
+  const record = await getRecord(subdomain)
+  if (!record) {
+    // Check if dns record already exists
     await createRecord({
       type: 'A',
       name: subdomain,
@@ -80,6 +87,7 @@ async function registerDNS(subdomain) {
 }
 
 module.exports = {
-  getRecords,
+  getRecord,
+  getAllRecords,
   registerDNS
 }
