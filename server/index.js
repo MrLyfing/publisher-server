@@ -15,7 +15,7 @@ app.use(morgan('dev')) // requests logger
 app.use('/api', api)
 
 // Middleware error handler
-app.use((err, req, res, _) => {
+app.use((err, req, res, next) => {
   if (!err.isBoom) {
     // Log not boom error as they might contain important error info
     let errMessage = '[INTERNAL_ERROR] - '

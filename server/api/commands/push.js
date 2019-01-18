@@ -37,7 +37,7 @@ module.exports = (req, res, next) => {
           fullDomain = `${subdomain}.${ROOT_DOMAIN_NAME}`
         }
         if (isDirectoryExists(extractPath)) {
-          // Whether the DNS record is new or already registred, delete folder content if existing
+          // Whether the DNS record is new or already registred, delete folder content if exists
           await deleteFolder(`${extractPath}/*`)
           console.log(`[API|PUSH] - Clear ${extractPath} folder content`)
         } else {

@@ -8,6 +8,5 @@ module.exports = {
   plugins: ['prettier'], // 'eslint-plugin-prettier' allows to enable prettier rules in eslint
   rules: {
     'prettier/prettier': 'error' // display prettier error from eslint
-    // 'no-console': 'off' // Temporary rule
   }
 }
