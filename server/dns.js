@@ -79,7 +79,7 @@ async function registerDNS(subdomain) {
 
 async function removeRecord(id) {
   const body = await new Promise((resolve, reject) => {
-    request.get(
+    request.delete(
       DEFAULT_REQUEST_OPTIONS(`/domains/${ROOT_DOMAIN_NAME}/records/${id}`),
       requestHandler(resolve, reject)
     )

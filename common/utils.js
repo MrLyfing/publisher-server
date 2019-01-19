@@ -21,7 +21,6 @@ function matchSingleSubdomainLvl(str) {
 function deleteFolder(pattern) {
   return new Promise((resolve, reject) => {
     rimraf(pattern, err => {
-      // Delete all folder content
       if (err) reject(err)
       resolve()
     })
