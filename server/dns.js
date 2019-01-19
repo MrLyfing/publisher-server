@@ -8,7 +8,7 @@ const {
 } = require('@server/config')
 const { matchSingleSubdomainLvl } = require('@common/utils')
 
-const DEFAULT_REQUEST_OPTIONS = (uri, options) => ({
+const DEFAULT_REQUEST_OPTIONS = (uri, options = {}) => ({
   url: `https://api.digitalocean.com/v2/${uri}`,
   headers: {
     Authorization: `Bearer ${DIGITAL_OCEAN_API_KEY}`
@@ -78,17 +78,28 @@ async function registerDNS(subdomain) {
 }
 
 async function removeRecord(id) {
-  const body = await new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     request.delete(
       DEFAULT_REQUEST_OPTIONS(`/domains/${ROOT_DOMAIN_NAME}/records/${id}`),
       requestHandler(resolve, reject)
     )
   })
-  return body
+}
+
+async function updateRecord(id, form = {}) {
+  await new Promise((resolve, reject) => {
+    request.put(
+      DEFAULT_REQUEST_OPTIONS(`/domains/${ROOT_DOMAIN_NAME}/records/${id}`, {
+        form
+      }),
+      requestHandler(resolve, reject)
+    )
+  })
 }
 
 module.exports = {
   getAllRecords,
   registerDNS,
-  removeRecord
+  removeRecord,
+  updateRecord
 }

@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
       (fields.root && fields.subdomain) ||
       (!fields.root && !fields.subdomain)
     ) {
-      next(boom.badRequest('Form data is incorrect'))
+      next(boom.badData('Form data is incorrect'))
     } else {
       // Fields values returned by multiparty are array types
       const root = !!(fields.root && fields.root[0])

@@ -11,6 +11,9 @@ module.exports = async (req, res, next) => {
     await removeRecord(A.id)
     await removeRecord(CNAME.id)
     deleteFolder(`${NGINX.SUB_DOMAINS_FOLDER}/${A.name}`)
+    console.log(
+      `[API|REMOVE] - Remove folder ${NGINX.SUB_DOMAINS_FOLDER}/${A.name}`
+    )
     responseJSON(res, 200, `Subdomain ${A.name} has been deleted`)
   } catch (err) {
     next(err)

@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 
 router.post('/push', push)
 router.get('/list', list)
-router.put('/update/:subdomain', update)
+router.put('/update/:subdomain', lookupSubdomain, update)
 router.delete('/remove/:subdomain', lookupSubdomain, remove)
 
 module.exports = router

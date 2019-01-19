@@ -5,12 +5,14 @@ const http = require('http')
 const express = require('express')
 const morgan = require('morgan')
 const boom = require('boom')
+const bodyParser = require('body-parser')
 
 const { PORT } = require('@server/config')
 const api = require('@server/api')
 
 const app = express()
 
+app.use(bodyParser.urlencoded({ extended: false })) // parse application/x-www-form-urlencoded
 app.use(morgan('dev')) // requests logger
 app.use('/api', api)
 
