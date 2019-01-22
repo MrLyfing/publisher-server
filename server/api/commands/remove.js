@@ -5,11 +5,10 @@ const { NGINX } = require('@server/config')
 const { responseJSON } = require('@server/utils')
 
 module.exports = async (req, res, next) => {
-  const { A, CNAME } = res.locals
+  const { A } = res.locals
 
   try {
     await removeRecord(A.id)
-    await removeRecord(CNAME.id)
     deleteFolder(`${NGINX.SUB_DOMAINS_FOLDER}/${A.name}`)
     console.log(
       `[API|REMOVE] - Remove folder ${NGINX.SUB_DOMAINS_FOLDER}/${A.name}`

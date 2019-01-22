@@ -1,4 +1,3 @@
-// Create CNAME and A DNS record with subdomain passed from the request
 const boom = require('boom')
 const request = require('request')
 const {
@@ -65,12 +64,6 @@ async function registerDNS(subdomain) {
       name: subdomain,
       data: IPV4_ADDRESS,
       ttl: 3600 // Default value when set from Digital Ocean dashboard
-    })
-    await createRecord({
-      type: 'CNAME',
-      name: `www.${subdomain}`,
-      data: `${subdomain}.${ROOT_DOMAIN_NAME}.`, // Data needs to end with a dot (.) for CNAME
-      ttl: 43200
     })
     return true
   }

@@ -3,10 +3,10 @@ const boom = require('boom')
 
 const { responseJSON } = require('@server/utils')
 const { updateRecord } = require('@server/dns')
-const { NGINX, ROOT_DOMAIN_NAME } = require('@server/config')
+const { NGINX } = require('@server/config')
 
 module.exports = async (req, res, next) => {
-  const { A, CNAME, records } = res.locals
+  const { A, records } = res.locals
   const { name } = req.body // new name
 
   if (!name) {
@@ -25,10 +25,6 @@ module.exports = async (req, res, next) => {
     } else {
       try {
         await updateRecord(A.id, { name })
-        await updateRecord(CNAME.id, {
-          name: `www.${name}`,
-          data: `${name}.${ROOT_DOMAIN_NAME}.`
-        })
         fs.renameSync(
           `${NGINX.SUB_DOMAINS_FOLDER}/${A.name}`,
           `${NGINX.SUB_DOMAINS_FOLDER}/${name}`
