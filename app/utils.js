@@ -9,10 +9,6 @@ function isDirectoryExists(path) {
   }
 }
 
-function isString(val) {
-  return typeof val === 'string' || val instanceof String
-}
-
 function matchSingleSubdomainLvl(str) {
   // Subdomain validator
   return /^[a-zA-Z0-9][a-zA-Z0-9-]{0,70}[a-zA-Z0-9]$/.test(str)
@@ -27,9 +23,17 @@ function deleteFolder(pattern) {
   })
 }
 
+function responseJSON(res, statusCode, message, data = {}) {
+  return res.status(statusCode).json({
+    statusCode,
+    message,
+    data
+  })
+}
+
 module.exports = {
   isDirectoryExists,
-  isString,
   matchSingleSubdomainLvl,
-  deleteFolder
+  deleteFolder,
+  responseJSON
 }

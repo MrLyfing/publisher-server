@@ -1,10 +1,10 @@
 const { Router } = require('express')
 const boom = require('boom')
 
-const { responseJSON } = require('@server/utils')
-const { push, update, list, remove } = require('@server/api/commands')
-const { lookupSubdomain } = require('@server/middlewares')
-const { ACCESS_TOKEN } = require('@server/config')
+const { responseJSON } = require('@app/utils')
+const { push, update, list, remove } = require('@app/api/commands')
+const { lookupSubdomain } = require('@app/middlewares')
+const { ACCESS_TOKEN } = require('@app/config')
 
 const router = Router()
 

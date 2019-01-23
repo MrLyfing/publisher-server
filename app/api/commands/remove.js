@@ -1,8 +1,7 @@
-const { removeRecord } = require('@server/dns')
-const { deleteFolder } = require('@common/utils')
-const { NGINX } = require('@server/config')
+const { removeRecord } = require('@app/dns')
+const { NGINX } = require('@app/config')
 
-const { responseJSON } = require('@server/utils')
+const { responseJSON, deleteFolder } = require('@app/utils')
 
 module.exports = async (req, res, next) => {
   const { A } = res.locals

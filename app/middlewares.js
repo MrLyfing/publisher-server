@@ -1,4 +1,4 @@
-const { getAllRecords } = require('@server/dns')
+const { getAllRecords } = require('@app/dns')
 const boom = require('boom')
 
 async function lookupSubdomain(req, res, next) {

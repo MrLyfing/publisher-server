@@ -4,8 +4,8 @@ const {
   DIGITAL_OCEAN_API_KEY,
   ROOT_DOMAIN_NAME,
   IPV4_ADDRESS
-} = require('@server/config')
-const { matchSingleSubdomainLvl } = require('@common/utils')
+} = require('@app/config')
+const { matchSingleSubdomainLvl } = require('@app/utils')
 
 const DEFAULT_REQUEST_OPTIONS = (uri, options = {}) => ({
   url: `https://api.digitalocean.com/v2/${uri}`,

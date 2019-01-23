@@ -3,3 +3,4 @@
 /node_modules
 /dir-*
 .env
+npm-debug.log

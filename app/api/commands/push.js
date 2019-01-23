@@ -4,15 +4,14 @@ const tar = require('tar-fs')
 const boom = require('boom')
 const fs = require('fs')
 
-const { NGINX, ROOT_DOMAIN_NAME } = require('@server/config')
-const { responseJSON } = require('@server/utils')
-const { deleteFolder, isDirectoryExists } = require('@common/utils')
+const { NGINX, ROOT_DOMAIN_NAME } = require('@app/config')
+const { deleteFolder, isDirectoryExists, responseJSON } = require('@app/utils')
 
-const { registerDNS } = require('@server/dns')
+const { registerDNS } = require('@app/dns')
 
 module.exports = (req, res, next) => {
   const form = new multiparty.Form()
-  form.parse(req, async (err, fields, _) => {
+  form.parse(req, async (err, fields, files) => {
     if (err) next(err)
     else if (
       // Check parameters existence

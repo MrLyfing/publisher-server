@@ -1,9 +1,9 @@
 const fs = require('fs')
 const boom = require('boom')
 
-const { responseJSON } = require('@server/utils')
-const { updateRecord } = require('@server/dns')
-const { NGINX } = require('@server/config')
+const { responseJSON } = require('@app/utils')
+const { updateRecord } = require('@app/dns')
+const { NGINX } = require('@app/config')
 
 module.exports = async (req, res, next) => {
   const { A, records } = res.locals

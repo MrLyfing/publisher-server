@@ -1,5 +1,4 @@
 require('module-alias/register')
-require('dotenv').config({ path: './server/.env' })
 
 const http = require('http')
 const express = require('express')
@@ -7,8 +6,8 @@ const morgan = require('morgan')
 const boom = require('boom')
 const bodyParser = require('body-parser')
 
-const { PORT } = require('@server/config')
-const api = require('@server/api')
+const { PORT } = require('@app/config')
+const api = require('@app/api')
 
 const app = express()
 

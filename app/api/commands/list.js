@@ -1,5 +1,5 @@
-const { getAllRecords } = require('@server/dns')
-const { responseJSON } = require('@server/utils')
+const { getAllRecords } = require('@app/dns')
+const { responseJSON } = require('@app/utils')
 
 module.exports = async (req, res, next) => {
   try {
