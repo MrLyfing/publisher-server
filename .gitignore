@@ -1,6 +1,5 @@
 .vscode
 .DS_Store
-/node_modules
-/dir-*
+node_modules
 .env
 npm-debug.log

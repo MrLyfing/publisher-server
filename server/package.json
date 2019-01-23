@@ -4,8 +4,8 @@
   "description": "Static website publisher for easy front-end deployment (server)",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --ignore-path .gitignore app",
-    "dev": "NODE_ENV=development nodemon app/index.js"
+    "lint": "eslint src",
+    "dev": "NODE_ENV=development nodemon src/index.js"
   },
   "author": "MrLyfing",
   "license": "ISC",
@@ -22,7 +22,7 @@
     "tar-fs": "^1.16.3"
   },
   "_moduleAliases": {
-    "@app": "./app"
+    "@": "./src"
   },
   "devDependencies": {
     "eslint": "^5.11.1",

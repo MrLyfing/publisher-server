@@ -4,10 +4,10 @@ const tar = require('tar-fs')
 const boom = require('boom')
 const fs = require('fs')
 
-const { NGINX, ROOT_DOMAIN_NAME } = require('@app/config')
-const { deleteFolder, isDirectoryExists, responseJSON } = require('@app/utils')
+const { NGINX, ROOT_DOMAIN_NAME } = require('@/config')
+const { deleteFolder, isDirectoryExists, responseJSON } = require('@/utils')
 
-const { registerDNS } = require('@app/dns')
+const { registerDNS } = require('@/dns')
 
 module.exports = (req, res, next) => {
   const form = new multiparty.Form()

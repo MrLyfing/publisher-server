@@ -6,8 +6,8 @@ const morgan = require('morgan')
 const boom = require('boom')
 const bodyParser = require('body-parser')
 
-const { PORT } = require('@app/config')
-const api = require('@app/api')
+const { PORT } = require('@/config')
+const api = require('@/api')
 
 const app = express()
 
