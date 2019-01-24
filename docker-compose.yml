@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  webserver:
+    image: publisher/webserver
+    build: ./nginx
+    ports:
+      - '80:80'
+    volumes:
+      - static-content:/usr/share/nginx/html/:ro
+      - ./nginx/public:/etc/nginx/public/:ro
+    links:
+      - 'api:publisher-api'
+
+  api:
+    image: publisher/api
+    build: ./server
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      PUBLIC_PATH: /usr/html
+    env_file: .env
+    volumes:
+      - static-content:/usr/html
+    expose:
+      - '3000'
+
+volumes:
+  static-content:

@@ -4,9 +4,9 @@ if (process.env.NODE_ENV === 'development') {
 
 const config = {
   NGINX: {
-    PUBLIC_FOLDER: process.env.PUBLIC_FOLDER || '',
-    ROOT_DOMAIN_FOLDER: `${process.env.PUBLIC_FOLDER}/default`,
-    SUB_DOMAINS_FOLDER: `${process.env.PUBLIC_FOLDER}/subdomains`
+    PUBLIC_PATH: process.env.PUBLIC_PATH || '',
+    ROOT_DOMAIN_FOLDER: `${process.env.PUBLIC_PATH}/root`,
+    SUB_DOMAINS_FOLDER: `${process.env.PUBLIC_PATH}/subdomains`
   },
   PORT: process.env.PORT || 3000,
 

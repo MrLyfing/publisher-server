@@ -3,3 +3,8 @@
 node_modules
 .env
 npm-debug.log
+
+# Ignore all in nginx/public/
+nginx/public/*
+# Except
+!nginx/public/conf.d/.gitkeep

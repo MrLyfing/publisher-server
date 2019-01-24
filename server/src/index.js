@@ -13,7 +13,7 @@ const app = express()
 
 app.use(bodyParser.urlencoded({ extended: false })) // parse application/x-www-form-urlencoded
 app.use(morgan('dev')) // requests logger
-app.use('/api', api)
+app.use('/', api)
 
 // Middleware error handler
 app.use((err, req, res, next) => {

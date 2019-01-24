@@ -9,7 +9,7 @@ const { ACCESS_TOKEN } = require('@/config')
 const router = Router()
 
 router.get('/', (req, res) => {
-  responseJSON(res, 200, 'Welcome on the static-publisher API')
+  responseJSON(res, 200, 'Welcome on the Publisher API')
 })
 
 router.use((req, res, next) => {
