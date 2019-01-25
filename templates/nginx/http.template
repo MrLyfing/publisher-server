@@ -1,0 +1,39 @@
+# Catch-all port 80 and redirect 404 if none of the server_name match
+server {
+        listen 80 default_server;
+        server_name _;
+        return 404;
+}
+
+# ROOT DOMAIN: Server block configuration
+server {
+        listen 80;
+        server_name ${ROOT_DOMAIN_NAME} www.${ROOT_DOMAIN_NAME};
+
+        root /usr/share/nginx/root;
+        index index.html;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+        location /.publisher-api/ {
+                proxy_pass http://publisher-api:3000/;
+        }
+}
+
+# SUBDOMAINS: Server block configuration
+server {
+        listen 80;
+        # Match a single subdomain. Works for "sub.example.com" but not "www.sub.example.com"
+        server_name ~^(www\.)?(?<sub>[^.]+)\.${ROOT_DOMAIN_NAME}$;
+
+        # Check if subdomain folder exisits
+        if (!-d /usr/share/nginx/subdomains/$sub) {
+                return 404;
+        }
+
+        root /usr/share/nginx/subdomains/$sub;
+        location / {
+              try_files $uri $uri/ =404;
+        }
+}

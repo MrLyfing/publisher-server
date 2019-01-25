@@ -5,6 +5,6 @@ node_modules
 npm-debug.log
 
 # Ignore all in nginx/public/
-nginx/public/*
+public/*
 # Except
-!nginx/public/conf.d/.gitkeep
+!public/**/.gitkeep
