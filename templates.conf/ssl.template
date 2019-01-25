@@ -13,7 +13,7 @@ server {
         ssl_certificate /etc/ssl/fullchain.pem;
         ssl_certificate_key /etc/ssl/privkey.pem;
 
-        root ${NGINX_PUBLIC_HTML}/root;
+        root ${NGINX_HTML_PATH}/root;
         index index.html;
 
         location / {
@@ -36,11 +36,11 @@ server {
         ssl_certificate_key /etc/ssl/privkey.pem;
 
         # Check if subdomain folder exisits
-        if (!-d ${NGINX_PUBLIC_HTML}/subdomains/$sub) {
+        if (!-d ${NGINX_HTML_PATH}/subdomains/$sub) {
                 return 404;
         }
 
-        root ${NGINX_PUBLIC_HTML}/subdomains/$sub;
+        root ${NGINX_HTML_PATH}/subdomains/$sub;
         index index.html;
 
         location / {

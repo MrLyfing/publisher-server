@@ -10,7 +10,7 @@ server {
         listen 80;
         server_name ${ROOT_DOMAIN_NAME} www.${ROOT_DOMAIN_NAME};
 
-        root ${NGINX_PUBLIC_HTML}/root;
+        root ${NGINX_HTML_PATH}/root;
         index index.html;
 
         location / {
@@ -27,11 +27,11 @@ server {
         # Match a single subdomain. Works for "sub.example.com" but not "www.sub.example.com"
         server_name ~^(www\.)?(?<sub>[^.]+)\.${ROOT_DOMAIN_NAME}$;
 
-        root ${NGINX_PUBLIC_HTML}/subdomains/$sub;
+        root ${NGINX_HTML_PATH}/subdomains/$sub;
         index index.html;
 
         # Check if subdomain folder exisits
-        if (!-d ${NGINX_PUBLIC_HTML}/subdomains/$sub) {
+        if (!-d ${NGINX_HTML_PATH}/subdomains/$sub) {
                 return 404;
         }
 

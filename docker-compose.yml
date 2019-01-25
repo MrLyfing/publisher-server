@@ -2,33 +2,25 @@ version: '3'
 
 services:
   webserver:
-    image: nginx:alpine
+    build: ./apps/nginx
+    env_file: .env
     ports:
       - '80:80'
       - '443:443'
-    env_file: .env
-    environment:
-      - NGINX_PUBLIC_HTML=/usr/share/nginx/html
     volumes:
       - ./public/conf.d:/etc/nginx/conf.d
       - ./public/ssl:/etc/nginx/certs
       - ./public/snippets:/etc/nginx/snippets
       - static-content:/usr/share/nginx/html
-    command: >
-      sh -c "mkdir -p $${NGINX_PUBLIC_HTML}/root $${NGINX_PUBLIC_HTML}/subdomains &&
-      mv $${NGINX_PUBLIC_HTML}/index.html $${NGINX_PUBLIC_HTML}/root &&
-      rm -f $${NGINX_PUBLIC_HTML}/*.html &&
-      envsubst '$$ROOT_DOMAIN_NAME $$NGINX_PUBLIC_HTML' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf &&
-      nginx -g 'daemon off;'"
     links:
       - 'api:publisher-api'
   api:
     image: publisher/api
-    build: ./server
+    build: ./apps/server
     environment:
       NODE_ENV: production
       PORT: 3000
-      PUBLIC_PATH: /usr/html
+      SERVER_PUBLIC_PATH: /usr/html
     env_file: .env
     volumes:
       - static-content:/usr/html
