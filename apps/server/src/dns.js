@@ -16,6 +16,9 @@ const DEFAULT_REQUEST_OPTIONS = (uri, options = {}) => ({
   ...options
 })
 
+const UNPROCESSABLE_DATA_MESSAGE =
+  'Cannot process Digital Ocean response format'
+
 const requestHandler = (resolve, reject) => (errMessage, res, body) => {
   body && console.log(`[DIGITAL_OCEAN_API] - ${JSON.stringify(body)}`)
   if (errMessage) {
@@ -25,6 +28,19 @@ const requestHandler = (resolve, reject) => (errMessage, res, body) => {
   } else {
     resolve(body)
   }
+}
+
+async function getAllDomains() {
+  const data = await new Promise((resolve, reject) => {
+    request.get(
+      DEFAULT_REQUEST_OPTIONS(`/domains`),
+      requestHandler(resolve, reject)
+    )
+  })
+  if (data.domains) {
+    return data.domains
+  }
+  throw boom.serverUnavailable(UNPROCESSABLE_DATA_MESSAGE)
 }
 
 async function getAllRecords() {
@@ -37,7 +53,21 @@ async function getAllRecords() {
   if (data.domain_records && Array.isArray(data.domain_records)) {
     return data.domain_records
   }
-  throw boom.serverUnavailable('Cannot process Digital Ocean response format')
+  throw boom.serverUnavailable(UNPROCESSABLE_DATA_MESSAGE)
+}
+
+async function createDomain(name, IPAddress) {
+  return new Promise((resolve, reject) => {
+    request.post(
+      DEFAULT_REQUEST_OPTIONS(`/domains`, {
+        form: {
+          name,
+          ip_address: IPAddress
+        }
+      }),
+      requestHandler(resolve, reject)
+    )
+  })
 }
 
 function createRecord(form) {
@@ -91,8 +121,11 @@ async function updateRecord(id, form = {}) {
 }
 
 module.exports = {
+  getAllDomains,
   getAllRecords,
+  createDomain,
   registerDNS,
+  createRecord,
   removeRecord,
   updateRecord
 }

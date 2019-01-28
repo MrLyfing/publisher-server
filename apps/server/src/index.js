@@ -8,8 +8,10 @@ const bodyParser = require('body-parser')
 
 const { PORT } = require('@/config')
 const api = require('@/api')
+const initialize = require('@/init')
 
 const app = express()
+const server = http.createServer(app)
 
 app.use(bodyParser.urlencoded({ extended: false })) // parse application/x-www-form-urlencoded
 app.use(morgan('dev')) // requests logger
@@ -31,6 +33,15 @@ app.use((err, req, res, next) => {
   res.status(code).json(err.output.payload)
 })
 
-http.createServer(app).listen(PORT, () => {
-  console.log(`Express server listening on ${PORT}`)
-})
+async function run() {
+  try {
+    await initialize()
+    server.listen(PORT, () => {
+      console.log(`[API | INIT] Success. Express server listening on ${PORT}`)
+    })
+  } catch (errMessage) {
+    console.error(`[API | INIT] Failed. ${errMessage}`)
+  }
+}
+
+run()
